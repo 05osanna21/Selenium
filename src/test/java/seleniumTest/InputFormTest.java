@@ -2,6 +2,7 @@ package seleniumTest;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.Assertions;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.DateHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,7 +51,7 @@ public class InputFormTest {;
     By daySelectedBy = By.xpath("//p[text()='Day selected :- Friday']");
     By multiSelectBy = By.xpath("//select[@id='multi-select']");
     By getAllSelectedBy = By.xpath("//button[text()='Get All Selected']");
-    By optionSelectedAreBy = By.xpath("//p[text()='Options selected are : Florida,New York']");
+    By optionSelectedAreBy = By.xpath("//p[text()='Options selected are : Florida']");
     By waitAjaxFormSubmitBy = By.xpath("//li[@class='tree-branch']//a[text()='Ajax Form Submit']");
     By buttonSubmitBy = By.xpath("//input[@id='btn-submit']");
     By colorValueBy = By.xpath("//input[@style='border: 1px solid rgb(255, 0, 0);']");
@@ -184,10 +186,10 @@ public class InputFormTest {;
         WebElement multiSelect = driver.findElement(multiSelectBy);
         Select dropdown = new Select(multiSelect);
         dropdown.selectByVisibleText("Florida");
-        dropdown.selectByVisibleText("New York");
+       // dropdown.selectByVisibleText("New York");
         WebElement getAllSelected = driver.findElement(getAllSelectedBy);
         getAllSelected.click();
-        String optionSelected = "Options selected are : Florida,New York";
+        String optionSelected = "Options selected are : Florida";
         String actualResualt = driver.findElement(optionSelectedAreBy).getText();
         Assert.assertEquals(optionSelected,actualResualt);
     }
@@ -200,8 +202,8 @@ public class InputFormTest {;
         WebElement submitButton = driver.findElement(buttonSubmitBy);
         submitButton.click();
         String expectedColor = "rgb(255, 0, 0)";
-        String actualResualt = driver.findElement(colorValueBy).getCssValue("border");
-        Assert.assertEquals(expectedColor,actualResualt);
+        String actualResualt = driver.findElement(colorValueBy).getAttribute("outerHTML");
+        Assertions.assertThat(actualResualt).contains(expectedColor);
     }
     @Test
     public void test_8(){
@@ -211,13 +213,14 @@ public class InputFormTest {;
         bootstrapDatePicker.click();
         WebElement inputGroupAddon = driver.findElement(inputGroupAddonBy);
         inputGroupAddon.click();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        Date yesterday = calendar.getTime();
-        String expectedResualt = "Sat Nov 07 22:43:19 EET 2020";
-        String actualResual = new String(yesterday.toString());
-        Assert.assertEquals(expectedResualt,actualResual);
+
+        DateTime twoDaysFromToday = DateHelper.getDateAsDaysFromNow(2);
+        int dayNumberFromDate = DateHelper.getDayNumbeFromDate(twoDaysFromToday);
+        WebElement calendarOpenButton = driver.findElement(By.xpath("//div[@class='datepicker-days']//td[text()='" + dayNumberFromDate + "']"));
+        calendarOpenButton.click();
+        String actualResualt = driver.findElement(By.xpath("/div[@id='sandbox-container1']//input")).getText();
+        Assert.assertEquals(DateHelper.getDateInPropertlyFormat(twoDaysFromToday),actualResualt);
+
     }
     @Test
     public void test_9(){
