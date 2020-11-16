@@ -303,7 +303,7 @@ public class InputFormTest {;
         boolean actRes_15_1 = driver.findElement(imgBy).isEnabled();
         Assert.assertEquals(exp_15_1, actRes_15_1);
         WebElement firstName = driver.findElement(emptyFirstNameBy);
-        String textFirstName = firstName.getText();
+       // String textFirstName = firstName.getText();
        /* if (textFirstName.isEmpty()) {
             System.out.println("First Name is empty");
         }
