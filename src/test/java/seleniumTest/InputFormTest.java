@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class InputForm{;
+public class InputFormTest {;
     WebDriver driver;
     WebDriverWait wait;
 
