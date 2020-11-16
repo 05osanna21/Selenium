@@ -19,7 +19,7 @@ public class DateHelper {
         }
 
         public static String getDateInPropertlyFormat(DateTime dayFromNow) {
-            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/mm/yyyy");
+            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
             return dtfOut.print(dayFromNow);
         }
 
